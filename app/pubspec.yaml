@@ -1,0 +1,21 @@
+name: twenty_one_kurd
+description: 21 Kurd cultural platform starter app
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  firebase_auth: ^7.1.0
+  firebase_core: ^5.2.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
