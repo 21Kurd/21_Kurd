@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'auth_page.dart';
@@ -235,7 +235,7 @@ class _SubmitPageState extends State<SubmitPage> {
       TextField(controller: title, decoration: const InputDecoration(labelText: 'عنوان المقال')),
       const SizedBox(height: 12),
       DropdownButtonFormField<String>(
-        value: category,
+        initialValue: category,
         decoration: const InputDecoration(labelText: 'القسم'),
         items: ['التاريخ', 'السياسة', 'الثقافة والتراث', 'الفن والموسيقى', 'اللغة والشعر']
             .map((v) => DropdownMenuItem(value: v, child: Text(v))).toList(),
