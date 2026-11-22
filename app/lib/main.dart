@@ -280,19 +280,13 @@ class _SubmitPageState extends State<SubmitPage> {
       TextField(controller: body, maxLines: 7, decoration: const InputDecoration(labelText: 'نص المشاركة', alignLabelWithHint: true)),
       const SizedBox(height: 12),
       OutlinedButton.icon(
-        onPressed: _submit,
+        onPressed: null,
         icon: const Icon(Icons.attach_file), label: const Text('إرفاق صورة أو فيديو (قريباً)'),
       ),
       const SizedBox(height: 16),
       FilledButton(
         style: FilledButton.styleFrom(backgroundColor: forest, padding: const EdgeInsets.all(15)),
-        onPressed: () {
-          if (title.text.trim().isEmpty || body.text.trim().isEmpty) {
-            _notice(context, 'يرجى إدخال العنوان ونص المشاركة');
-            return;
-          }
-          _notice(context, 'هذه نسخة تجريبية: سيتم إرسال المشاركة للمراجعة بعد ربط قاعدة البيانات');
-        },
+        onPressed: _submit,
         child: const Text('إرسال للمراجعة'),
       ),
     ],
