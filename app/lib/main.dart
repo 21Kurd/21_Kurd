@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'auth_page.dart';
 
@@ -224,6 +226,39 @@ class _SubmitPageState extends State<SubmitPage> {
   @override
   void dispose() { title.dispose(); body.dispose(); super.dispose(); }
 
+  Future<void> _submit() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      _notice(context, 'سجّل الدخول قبل إرسال المساهمة.');
+      return;
+    }
+
+    final titleText = title.text.trim();
+    final bodyText = body.text.trim();
+    if (titleText.isEmpty || bodyText.isEmpty) {
+      _notice(context, 'أدخل العنوان والنص أولاً.');
+      return;
+    }
+
+    try {
+      await FirebaseFirestore.instance.collection('submissions').add({
+        'title': titleText,
+        'body': bodyText,
+        'category': category,
+        'ownerUid': user.uid,
+        'status': 'pending',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      if (!mounted) return;
+      title.clear();
+      body.clear();
+      _notice(context, 'أُرسلت المساهمة للمراجعة.');
+    } on FirebaseException {
+      if (!mounted) return;
+      _notice(context, 'تعذّر الإرسال. تحقق من الاتصال ثم حاول مجدداً.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) => ListView(
     padding: const EdgeInsets.all(16),
@@ -245,7 +280,7 @@ class _SubmitPageState extends State<SubmitPage> {
       TextField(controller: body, maxLines: 7, decoration: const InputDecoration(labelText: 'نص المشاركة', alignLabelWithHint: true)),
       const SizedBox(height: 12),
       OutlinedButton.icon(
-        onPressed: () => _notice(context, 'رفع الملفات سيتاح بعد ربط خدمة التخزين'),
+        onPressed: _submit,
         icon: const Icon(Icons.attach_file), label: const Text('إرفاق صورة أو فيديو (قريباً)'),
       ),
       const SizedBox(height: 16),
